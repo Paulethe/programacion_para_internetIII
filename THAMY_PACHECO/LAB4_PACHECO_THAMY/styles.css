@@ -1,0 +1,12 @@
+body{
+    background: #d3dff4;
+}
+
+.card{
+    border-radius: 12px;
+}
+
+small{
+    display: block;
+    min-height: 18px;
+}

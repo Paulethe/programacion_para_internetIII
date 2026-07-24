@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es" ng-app="tareasApp">
+<head>
+    <meta charset="UTF-8">
+    <title>Mis Tareas</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+</head>
+<body ng-controller="TareasController">
+
+    <h1>Lista de Tareas</h1>
+
+    <!-- Formulario para agregar tarea -->
+    <input type="text" ng-model="nuevoTitulo" placeholder="Escribe una tarea">
+    <button ng-click="agregarTarea()">Agregar</button>
+
+
+    <hr>
+
+   
+     
+    
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Título</th>
+                <th>Acciones</th>
+            </tr>
+            <tr ng-repeat="tarea in tareas">
+                <td>{{ tarea.id }}</td>
+                <td>{{ tarea.titulo }}</td>
+                <td><button ng-click="eliminarTarea(tarea)">Eliminar</button></td>
+            </tr>
+    </ul>
+
+    <script>
+        var app = angular.module('tareasApp', []);
+
+        app.controller('TareasController', function($scope, $http) {
+
+            var apiUrl = 'http://127.0.0.1:8000/api/tareas';
+
+            // Cargar tareas al abrir la página
+            function cargarTareas() {
+                $http.get(apiUrl).then(function(respuesta) {
+                    $scope.tareas = respuesta.data;
+                });
+            }
+
+            // Agregar una nueva tarea
+            $scope.agregarTarea = function() {
+                if (!$scope.nuevoTitulo) return; // no mandar vacío
+
+                $http.post(apiUrl, { titulo: $scope.nuevoTitulo })
+                    .then(function(respuesta) {
+                        $scope.tareas.push(respuesta.data); // la agrega a la lista sin recargar
+                        $scope.nuevoTitulo = ''; // limpia el input
+                    });
+            };
+
+            // Eliminar una tarea
+            $scope.eliminarTarea = function(tarea) {
+                $http.delete(apiUrl + '/' + tarea.id)
+                    .then(function() {
+                        $scope.tareas.splice($scope.tareas.indexOf(tarea), 1);
+                    });
+            };
+
+            cargarTareas(); // se ejecuta apenas carga la página
+        });
+    </script>
+
+</body>
+</html>
