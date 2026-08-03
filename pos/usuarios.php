@@ -103,12 +103,17 @@ if (isset($_SESSION['mensaje'])){
                                     <?php echo $usuario['fecha_creacion']; ?>
                                 </td>
                                 <td>
-                                    <a class="btn btn-warning btn-sm" href="editarUsuario.php?id=<?php echo $usuario['id_usuario']; ?>">
-                                        <i class="fa-solid fa-pen"></i>
-                                    </a>
-                                    <a onclick="return confirm('Desea eliminar este usuario?'" class="btn btn-danger btn-sm" href="controllers/eliminarUsuario.php?id=<?php echo $usuario['id_usuario']; ?>">
-                                        <i class="fa-solid fa-trash"></i>
-                                    </a>
+                                   <?php if($usuario['estado']==1){ ?>
+
+<a href="controllers/eliminarUsuario.php?id=<?php echo $usuario['id_usuario']; ?>"
+   class="btn btn-danger btn-sm"
+   onclick="return confirm('¿Desea desactivar este usuario?')">
+
+    <i class="fa-solid fa-user-slash"></i>
+
+</a>
+
+<?php } ?>
                                 </td>
                             </tr>
                         <?php } ?>
